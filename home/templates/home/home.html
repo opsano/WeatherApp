@@ -1,0 +1,28 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather App</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+
+    <!-- This is where the api will be placed, in the center of the screen -->
+    <div class="weather-card">
+        <div class="search-box">
+        
+        </div>
+
+        <div class="weather-body" id="weatherBody" style="display: none;">
+            <div class="weather-icon">
+                <!-- Icon placeholder -->
+                ☁️
+            </div>
+            
+        </div>
+    </div>
+</body>
+</html>
