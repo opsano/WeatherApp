@@ -1,3 +1,5 @@
+from pprint import pprint
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.conf import settings
 import requests
@@ -10,8 +12,32 @@ import os
 def home(request):
     return render(request, 'home/home.html')
 
+def search_page(request):
+    return render(request, "home/search.html")
+
+#this function will be used to get autocomplete suggestions for city names
+def searchAutoComplete(request):
+    query = request.GET.get('q','').strip()
+    if not query:
+        return JsonResponse([], safe=False)
+    
+    key = settings.WEATHER_API_KEY
+    url = f"http://api.weatherapi.com/v1/search.json?key={key}&q={query}"
+    response = requests.get(url, timeout=10)
+    data=response.json()
+
+    names = []
+    urls = []
+    for item in data:
+        names.append(f"{item['name']}, {item['region']}, {item['country']}")
+        urls.append(item['url'])
+    responseData = {'names': names, 'urls': urls}
+    pprint(responseData)
+    return JsonResponse(responseData, safe=False)
+
+
 def weather(request):
-    location = "San Diego" # this will be passed in through the front end later
+    location = request.GET.get('q') # this will be passed in through the front end later
 
     # commented out to use settings env variable of the api key 
     # key = os.getenv("WEATHER_API_KEY")
@@ -19,9 +45,11 @@ def weather(request):
     url = f"http://api.weatherapi.com/v1/current.json?key={key}&q={location}&aqi=no"
 
     response = requests.get(url, timeout=10)
-    response.raise_for_status() # will raise error if it occurred
+    if response.status_code != 200:
+        location = "San Diego"
+        url = f"http://api.weatherapi.com/v1/current.json?key={key}&q={location}&aqi=no"
+        response = requests.get(url, timeout=10)
     data = response.json()
-    
     current = data["current"] # gets current weather data
 
     condition = current["condition"]["text"].lower()
