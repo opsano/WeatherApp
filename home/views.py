@@ -51,6 +51,7 @@ def weather(request):
         response = requests.get(url, timeout=10)
     data = response.json()
     current = data["current"] # gets current weather data
+    location = data["location"]
 
     condition = current["condition"]["text"].lower()
     bg_class = "bg-sunny"
@@ -63,9 +64,10 @@ def weather(request):
     print(f"Weather Condition: '{condition}' -> Applied Class: '{bg_class}'") # Debugging line
 
     context = { # the data we care about
-        "location": location, # added location
+        "local_time" : location["localtime"],
+        "location": location["name"], # added location
         "temp" : current["temp_f"],
-        "clouds" : current["condition"]["text"],
+        "condition" : current["condition"]["text"],
         "humidity" : current["humidity"],
         "wind" : current["wind_mph"],
         "bg_class": bg_class,

@@ -14,8 +14,9 @@
     <div id="weather-bg" class="weather-container {{ bg_class }}">
         <h1 class="header-title">Current Weather in {{ location }}</h1>
         <div class="weather-details">
+            <p class="time-styling">Local Time: {{ local_time }}</p>
             <p class="temp-styling">Temperature: {{ temp }} °F</p>
-            <p class="clouds-styling">Clouds: {{ clouds }}</p>
+            <p class="condition-styling">Condition: {{ condition }}</p>
             <p class="humidity-styling">Humidity: {{ humidity }}%</p>
             <p class="wind-styling">Wind Speed: {{ wind }} mph</p>
         </div>
